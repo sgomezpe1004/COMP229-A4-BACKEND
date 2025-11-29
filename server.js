@@ -29,13 +29,5 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to My Portfolio Application" });
 });
 
-// Iniciar servidor
-app.listen(PORT, (err) => {
-  if (err) {
-    console.error(err);
-  }
-  console.info(`Server started on port ${PORT}.`);
-  console.info(`Server URL: http://localhost:${PORT}`);
-});
 
 export default app;
