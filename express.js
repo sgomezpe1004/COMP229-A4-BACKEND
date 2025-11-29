@@ -7,11 +7,11 @@ import cors from "cors";
 import helmet from "helmet";
 
 // Import Routes
-import userRoutes from "./routes/user.routes.js";
-import authRoutes from "./routes/auth.routes.js";
-import contactRoutes from "./routes/contact.routes.js";
-import projectRoutes from "./routes/project.routes.js";
-import educationRoutes from "./routes/education.routes.js";
+import userRoutes from "./user.routes.js";
+import authRoutes from "./auth.routes.js";
+import contactRoutes from "./contact.routes.js";
+import projectRoutes from "./project.routes.js";
+import educationRoutes from "./education.routes.js";
 
 const app = express();
 
