@@ -1,5 +1,5 @@
 {
-  "name": "comp-229-backend",
+  "name": "comp229-backend",
   "version": "1.0.0",
   "type": "module",
   "main": "server.js",
@@ -10,10 +10,12 @@
     "body-parser": "^2.2.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "compression": "^1.7.4",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
-    "mongoose": "^8.20.1"
+    "mongoose": "^8.20.1",
+    "express-jwt": "^7.7.5"
   }
 }
