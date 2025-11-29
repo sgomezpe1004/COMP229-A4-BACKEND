@@ -1,5 +1,10 @@
 // api/index.js
 import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import helmet from "helmet";
+import compress from "compression";
+
 import connectDB from "./db.js";
 
 // Importa tus rutas
@@ -9,33 +14,45 @@ import contactRoutes from "../contact.routes.js";
 import projectRoutes from "../project.routes.js";
 import educationRoutes from "../education.routes.js";
 
+// Conecta a MongoDB antes de cualquier request
+await connectDB();
+
 const app = express();
 
-// Middleware
+// Middlewares
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(compress());
+app.use(helmet());
 
-// Top-level async function para conectar DB antes de usar rutas
-const startServer = async () => {
-  try {
-    await connectDB();
-  } catch (err) {
-    console.error("❌ Error connecting to MongoDB:", err);
-  }
+// CORS
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "*",
+    credentials: true,
+  })
+);
 
-  // Rutas
-  app.use("/api/users", userRoutes);
-  app.use("/api/auth", authRoutes);
-  app.use("/api/contacts", contactRoutes);
-  app.use("/api/projects", projectRoutes);
-  app.use("/api/education", educationRoutes);
+// Rutas
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/contacts", contactRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/education", educationRoutes);
 
-  // Ruta de prueba
-  app.get("/", (req, res) => {
-    res.json({ message: "Backend is running" });
+// Ruta de prueba
+app.get("/", (req, res) => {
+  res.json({ message: "Backend running" });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).json({
+    error: err.message || "Something went wrong",
   });
+});
 
-  return app;
-};
-
-// Exporta el app ya inicializado
-export default await startServer();
+// **IMPORTANTE:** No usamos app.listen() en Vercel
+export default app;
