@@ -1,16 +1,11 @@
-// api/db.js
 import mongoose from "mongoose";
 
-let isConnected = false; // cached connection
+let isConnected = false;
 
 export const connectToDatabase = async () => {
-  if (isConnected) {
-    return;
-  }
+  if (isConnected) return;
 
-  if (!process.env.MONGO_URI) {
-    throw new Error("MONGO_URI is not defined");
-  }
+  if (!process.env.MONGO_URI) throw new Error("MONGO_URI is not defined");
 
   await mongoose.connect(process.env.MONGO_URI);
   isConnected = true;
