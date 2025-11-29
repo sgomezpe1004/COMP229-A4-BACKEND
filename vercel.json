@@ -1,9 +1,17 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/index.js", "use": "@vercel/node" }
+    { "src": "api/auth.js", "use": "@vercel/node" },
+    { "src": "api/users.js", "use": "@vercel/node" },
+    { "src": "api/projects.js", "use": "@vercel/node" },
+    { "src": "api/contacts.js", "use": "@vercel/node" },
+    { "src": "api/qualifications.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/api/index.js" }
+    { "src": "/auth/(.*)", "dest": "/api/auth.js" },
+    { "src": "/users/(.*)", "dest": "/api/users.js" },
+    { "src": "/projects/(.*)", "dest": "/api/projects.js" },
+    { "src": "/contacts/(.*)", "dest": "/api/contacts.js" },
+    { "src": "/qualifications/(.*)", "dest": "/api/qualifications.js" }
   ]
 }
