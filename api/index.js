@@ -1,4 +1,3 @@
-// server.js
 import express from "express";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
@@ -7,14 +6,13 @@ import cors from "cors";
 import helmet from "helmet";
 
 // Import routes
-import userRoutes from "./user.routes.js";
-import authRoutes from "./auth.routes.js";
-import contactRoutes from "./contact.routes.js";
-import projectRoutes from "./project.routes.js";
-import educationRoutes from "./education.routes.js";
+import userRoutes from "../user.routes.js";
+import authRoutes from "../auth.routes.js";
+import contactRoutes from "../contact.routes.js";
+import projectRoutes from "../project.routes.js";
+import educationRoutes from "../education.routes.js";
 
-// Config
-import config from "./config.js";
+import config from "../config.js";
 
 const app = express();
 
@@ -25,22 +23,22 @@ app.use(cookieParser());
 app.use(compress());
 app.use(helmet());
 
-// CORS
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "*", // Replace with your frontend URL if needed
+    origin: process.env.FRONTEND_URL || "*",
     credentials: true,
   })
 );
 
-// Connect to MongoDB
-mongoose
-  .connect(config.mongoUri, {
+// Connect to MongoDB (singleton para Serverless)
+if (!mongoose.connection.readyState) {
+  mongoose.connect(config.mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.error("MongoDB connection error:", err));
+}
 
 // Routes
 app.use("/api/users", userRoutes);
@@ -62,10 +60,5 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-const PORT = config.port || 3005;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
+// Export para Vercel
 export default app;
