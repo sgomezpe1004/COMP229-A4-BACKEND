@@ -1,45 +1,41 @@
 import { connectToDatabase } from "./db.js";
-import Project from "../models/project.model.js";
+import Contact from "../models/contact.model.js";
 
 export default async function handler(req, res) {
   await connectToDatabase();
-
   const { method } = req;
   const { id } = req.query;
 
   try {
-    switch (method) {
+    switch(method) {
       case "GET":
-        if (id) {
-          const project = await Project.findById(id);
-          if (!project) return res.status(404).json({ error: "Project not found" });
-          return res.status(200).json(project);
+        if(id) {
+          const contact = await Contact.findById(id);
+          if(!contact) return res.status(404).json({ error: "Contact not found" });
+          return res.status(200).json(contact);
+        } else {
+          const contacts = await Contact.find().select("firstname lastname email contactNumber");
+          return res.status(200).json(contacts);
         }
-        const projects = await Project.find();
-        return res.status(200).json(projects);
-
       case "POST":
-        const newProject = new Project(req.body);
-        await newProject.save();
-        return res.status(201).json({ message: "Project created", project: newProject });
-
+        const newContact = new Contact(req.body);
+        await newContact.save();
+        return res.status(201).json({ message: "Contact created", contact: newContact });
       case "PUT":
-        if (!id) return res.status(400).json({ error: "ID is required" });
-        const updatedProject = await Project.findByIdAndUpdate(id, req.body, { new: true });
-        if (!updatedProject) return res.status(404).json({ error: "Project not found" });
-        return res.status(200).json({ message: "Project updated", project: updatedProject });
-
+        if(!id) return res.status(400).json({ error: "ID required" });
+        const updatedContact = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+        if(!updatedContact) return res.status(404).json({ error: "Contact not found" });
+        return res.status(200).json({ message: "Contact updated", contact: updatedContact });
       case "DELETE":
-        if (!id) return res.status(400).json({ error: "ID is required" });
-        const deletedProject = await Project.findByIdAndDelete(id);
-        if (!deletedProject) return res.status(404).json({ error: "Project not found" });
-        return res.status(200).json({ message: "Project deleted" });
-
+        if(!id) return res.status(400).json({ error: "ID required" });
+        const deletedContact = await Contact.findByIdAndDelete(id);
+        if(!deletedContact) return res.status(404).json({ error: "Contact not found" });
+        return res.status(200).json({ message: "Contact deleted" });
       default:
-        res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
-        return res.status(405).json({ error: `Method ${method} Not Allowed` });
+        res.setHeader("Allow", ["GET","POST","PUT","DELETE"]);
+        return res.status(405).json({ error: `Method ${method} not allowed` });
     }
-  } catch (error) {
+  } catch(error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
   }
