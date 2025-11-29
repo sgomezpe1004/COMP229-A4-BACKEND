@@ -5,13 +5,13 @@
     { "src": "api/auth.js", "use": "@vercel/node" },
     { "src": "api/projects.js", "use": "@vercel/node" },
     { "src": "api/contacts.js", "use": "@vercel/node" },
-    { "src": "api/qualifications.js", "use": "@vercel/node" }
+    { "src": "api/education.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/users/?(.*)", "dest": "/api/users.js" },
     { "src": "/auth/?(.*)", "dest": "/api/auth.js" },
     { "src": "/projects/?(.*)", "dest": "/api/projects.js" },
     { "src": "/contacts/?(.*)", "dest": "/api/contacts.js" },
-    { "src": "/qualifications/?(.*)", "dest": "/api/qualifications.js" }
+    { "src": "/qualifications/?(.*)", "dest": "/api/education.js" }
   ]
 }
